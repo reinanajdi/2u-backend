@@ -1,0 +1,21 @@
+﻿# Python
+__pycache__/
+*.pyc
+
+# Virtual env
+.venv/
+
+# Local DB
+2u.db
+
+# Env files (keep .env.example)
+.env
+.env.*
+
+# IDE
+.vscode/
+.idea/
+
+# Build artifacts
+dist/
+build/
