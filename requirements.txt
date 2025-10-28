@@ -4,3 +4,6 @@ sqlalchemy
 python-jose
 passlib[bcrypt]
 # add any others you use: uvicorn, python-multipart, etc.
+pydantic-settings
+pydantic>=2
+python-multipart
