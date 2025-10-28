@@ -12,17 +12,13 @@ app = FastAPI(
 
 @app.on_event("startup")
 def on_startup():
-    # Avoid creating tables on import; do it at startup and only for real DBs
     try:
         if DATABASE_URL and not DATABASE_URL.startswith("sqlite"):
             Base.metadata.create_all(bind=engine)
     except Exception as e:
         print("Startup DB init skipped/failed:", e)
 
-# Global error handlers
 install_error_handlers(app)
-
-# Routers
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(service_requests.router)

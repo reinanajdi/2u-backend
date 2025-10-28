@@ -1,12 +1,17 @@
-from pydantic_settings import BaseSettings
+# app/config.py
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import Field
 
 class Settings(BaseSettings):
-    DATABASE_URL: str = "sqlite:///./2u.db"
-    JWT_SECRET: str = "devsecret"
-    JWT_ALG: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24
+    # DB: safe default for dev; override with env on Vercel
+    DATABASE_URL: str = Field(default="sqlite:///./dev.db")
 
-    class Config:
-        env_file = ".env"
+    # Auth / JWT – give dev defaults so missing envs don’t crash boot
+    JWT_SECRET: str = Field(default="dev-secret")
+    JWT_ALGORITHM: str = Field(default="HS256")
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(default=60)
+
+    # Allow extra envs without failing, and load local .env if present
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
 settings = Settings()
