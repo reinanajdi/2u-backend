@@ -1,17 +1,23 @@
 # app/main.py
 from fastapi import FastAPI
-from app.database import engine, Base
+from app.database import engine, Base, DATABASE_URL
 from app.errors import install_error_handlers
 from app.routers import auth, users, service_requests, messages
-
-# Create DB tables on startup (OK for dev; for prod use migrations)
-Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="2U Backend API",
     description="On-road assistance platform: users, providers, requests, and chat.",
     version="1.0.0",
 )
+
+@app.on_event("startup")
+def on_startup():
+    # Avoid creating tables on import; do it at startup and only for real DBs
+    try:
+        if DATABASE_URL and not DATABASE_URL.startswith("sqlite"):
+            Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        print("Startup DB init skipped/failed:", e)
 
 # Global error handlers
 install_error_handlers(app)
