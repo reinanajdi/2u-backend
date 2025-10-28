@@ -3,8 +3,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 from app.config import settings
 
-# export this so main.py can import it
-DATABASE_URL = settings.DATABASE_URL
+# Safe fallback to local SQLite if the env var isn't present
+DATABASE_URL = getattr(settings, "DATABASE_URL", None) or "sqlite:///./dev.db"
 
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
 
