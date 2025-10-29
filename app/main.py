@@ -13,8 +13,9 @@ app = FastAPI(
 @app.on_event("startup")
 def on_startup():
     try:
-        # Only run DDL for real hosted DBs; NOT for SQLite on Vercel
         if DATABASE_URL and not DATABASE_URL.startswith("sqlite"):
+            # 👇 import your ORM models so metadata is populated
+            from app import models  # noqa: F401
             Base.metadata.create_all(bind=engine)
     except Exception as e:
         print("Startup DB init skipped/failed:", e)
