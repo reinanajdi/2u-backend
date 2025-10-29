@@ -1,5 +1,4 @@
-@'
-import traceback
+﻿import traceback
 try:
     from app.main import app
 except Exception:
@@ -8,5 +7,5 @@ except Exception:
     app = FastAPI(title="Boot Error")
     @app.get("/")
     def _boot_error():
+        # show the real error so we can fix it quickly
         return {"error": "boot_failed", "traceback": tb}
-'@ | Out-File -Encoding UTF8 index.py
