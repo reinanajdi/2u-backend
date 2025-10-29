@@ -1,7 +1,10 @@
 ﻿fastapi
-pydantic>=2
+pydantic
 sqlalchemy
 python-jose
 passlib[bcrypt]
-python-multipart
+# add any others you use: uvicorn, python-multipart, etc.
 pydantic-settings
+pydantic>=2
+python-multipart
+email-validator
