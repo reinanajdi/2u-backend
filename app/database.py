@@ -1,10 +1,15 @@
 # app/database.py
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 from app.config import settings
 
-# Safe fallback to local SQLite if the env var isn't present
-DATABASE_URL = getattr(settings, "DATABASE_URL", None) or "sqlite:///./dev.db"
+# If on Vercel and no DATABASE_URL is provided, use in-memory SQLite
+default_sqlite = "sqlite://"
+if not os.getenv("VERCEL"):
+    default_sqlite = "sqlite:///./dev.db"
+
+DATABASE_URL = getattr(settings, "DATABASE_URL", None) or os.getenv("DATABASE_URL", default_sqlite)
 
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
 

@@ -13,6 +13,7 @@ app = FastAPI(
 @app.on_event("startup")
 def on_startup():
     try:
+        # Only run DDL for real hosted DBs; NOT for SQLite on Vercel
         if DATABASE_URL and not DATABASE_URL.startswith("sqlite"):
             Base.metadata.create_all(bind=engine)
     except Exception as e:
